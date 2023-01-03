@@ -1,0 +1,36 @@
+from typing import List
+
+
+class Solution:
+    def findBlackPixel(self, picture: List[List[str]], target: int) -> int:
+        count = 0
+        safeCol = set()
+
+        def countRow(r: int) -> bool:
+            row = picture[r]
+            return row.count('B') == target
+
+        def countCol(c: int) -> bool:
+            cnt = 0
+            for row in picture:
+                cnt += 1 if row[c] == 'B' else 0
+            return cnt == target
+        
+        def findFirstRow(c: int) -> int:
+            for row in range(len(picture)):
+                if picture[row][c] == 'B':
+                    return row
+
+        for col in range(len(picture[0])):
+            if not countCol(col): continue
+            first_row = findFirstRow(col)
+            if not countRow(first_row): continue
+            if picture.count(picture[first_row]) != target: continue
+            count += target
+        return count
+
+
+sol = Solution()
+print(sol.findBlackPixel([["W", "B", "W", "B", "B", "W"], ["W", "B", "W", "B", "B", "W"], [
+      "W", "B", "W", "B", "B", "W"], ["W", "W", "B", "W", "B", "W"]], 3))
+print(sol.findBlackPixel([["W","W","B"],["W","W","B"],["W","W","B"]],1))
